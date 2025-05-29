@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Student Helpline 🌸</title>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Quicksand', sans-serif;
+      margin: 0;
+      background: linear-gradient(to bottom, #fff1f7, #ffe6f0);
+    }
+
+    header {
+      background-color: #ffcce1;
+      padding: 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      color: #9e3c72;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-around;
+      background-color: #fce4ec;
+      padding: 12px 0;
+      border-bottom: 2px solid #ffcce1;
+    }
+
+    nav button {
+      background: #ffd6e8;
+      border: none;
+      font-size: 1rem;
+      font-weight: bold;
+      color: #c2185b;
+      padding: 10px 16px;
+      border-radius: 15px;
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+    }
+
+    nav button.active {
+      background-color: #f8bbd0;
+      color: #880e4f;
+      border: 2px solid #c2185b;
+    }
+
+    section {
+      display: none;
+      padding: 30px;
+      max-width: 700px;
+      margin: auto;
+    }
+
+    section.active {
+      display: block;
+    }
+
+    .feature-box {
+      background-color: #fff;
+      border-radius: 15px;
+      padding: 25px;
+      border: 2px dashed #ffc1e3;
+      box-shadow: 0 8px 20px rgba(255, 192, 203, 0.2);
+    }
+
+    input, button, select, textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 10px;
+      border: 1px solid #ffcce1;
+      font-family: 'Quicksand', sans-serif;
+    }
+
+    button {
+      background-color: #ffcce1;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    ul {
+      padding-left: 20px;
+    }
+
+    .routine-block {
+      background-color: #fff0f6;
+      border-left: 5px solid #f06292;
+      margin: 10px 0;
+      padding: 10px 15px;
+      border-radius: 10px;
+    }
+
+    .task-done {
+      text-decoration: line-through;
+      color: gray;
+    }
+
+    footer {
+      text-align: center;
+      background-color: #ffe4f0;
+      padding: 10px;
+      color: #777;
+      font-size: 0.9rem;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Student Helpline 🌸</h1>
+  </header>
+
+  <nav>
+    <button class="tab-button active" data-tab="planner">📅 Planner</button>
+    <button class="tab-button" data-tab="todo">✅ To-Do</button>
+    <button class="tab-button" data-tab="timer">⏱ Timer</button>
+    <button class="tab-button" data-tab="roadmap">🧭 Roadmap</button>
+    <button class="tab-button" data-tab="habit">📈 Habit Tracker</button>
+  </nav>
+
+  <!-- 📅 Planner -->
+  <section id="planner" class="active">
+    <div class="feature-box">
+      <h2>📅 Smart Daily Exam Planner</h2>
+      <form id="planner-form">
+        <input type="text" id="subject" placeholder="Subject (e.g. Biology)" required>
+        <input type="date" id="exam-date" required>
+        <input type="number" id="chapters" placeholder="Total Chapters" min="1" required>
+        <input type="number" id="hours" placeholder="Hours per Chapter" min="1" required>
+        <button type="submit">Generate Daily Plan</button>
+      </form>
+      <div id="routine-output" style="margin-top: 20px;"></div>
+    </div>
+  </section>
+
+  <!-- ✅ To-Do List -->
+  <section id="todo">
+    <div class="feature-box">
+      <h2>✅ To-Do List</h2>
+      <form id="todo-form">
+        <input type="text" id="task" placeholder="Task" required>
+        <input type="text" id="category" placeholder="Category (e.g. Study, Self-care)">
+        <input type="date" id="deadline">
+        <textarea id="description" placeholder="Description (optional)"></textarea>
+        <button type="submit">Add Task</button>
+      </form>
+      <ul id="todo-list"></ul>
+    </div>
+  </section>
+
+  <!-- ⏱ Timer -->
+  <section id="timer">
+    <div class="feature-box">
+      <h2>⏱ Pomodoro Timer</h2>
+      <p><span id="time">25:00</span></p>
+      <button onclick="startTimer()">Start</button>
+      <button onclick="resetTimer()">Reset</button>
+    </div>
+  </section>
+
+  <!-- 🧭 Roadmap Generator -->
+ <section id="roadmap">
+  <div class="feature-box">
+    <h2>🗺️ Roadmap Generator</h2>
+    <form id="roadmap-form">
+      <input type="number" id="grade" placeholder="Current Grade (e.g. 10, 11, 12)" required>
+      <input type="text" id="hobbies" placeholder="Hobbies (comma-separated)" required>
+      <input type="text" id="goal" placeholder="Dream Career / Major (optional)">
+      <button type="submit">Generate Roadmap</button>
+    </form>
+    <div id="roadmap-output" style="margin-top: 20px;"></div>
+  </div>
+</section>
+
+
+  <footer>
+    Made with 💖 for students like you!
+  </footer>
+
+  <script>
+    // Tab switcher
+    document.querySelectorAll(".tab-button").forEach(button => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll(".tab-button").forEach(btn => btn.classList.remove("active"));
+        document.querySelectorAll("section").forEach(sec => sec.classList.remove("active"));
+        button.classList.add("active");
+        document.getElementById(button.dataset.tab).classList.add("active");
+      });
+    });
+
+    // Exam Planner
+    document.getElementById("planner-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const subject = document.getElementById("subject").value;
+      const examDate = new Date(document.getElementById("exam-date").value);
+      const chapters = parseInt(document.getElementById("chapters").value);
+      const hoursPerChapter = parseInt(document.getElementById("hours").value);
+      const today = new Date(); today.setHours(0, 0, 0, 0);
+      const daysLeft = Math.ceil((examDate - today) / (1000 * 60 * 60 * 24));
+      const output = document.getElementById("routine-output");
+      output.innerHTML = "";
+      if (daysLeft < 1) {
+        output.innerHTML = `<p style="color:red;">⚠️ Exam date must be in the future.</p>`;
+        return;
+      }
+      const totalStudyHours = chapters * hoursPerChapter;
+      const dailyStudyHours = Math.ceil(totalStudyHours / daysLeft);
+      output.innerHTML = `
+        <h3>📘 Daily Routine for <strong>${subject}</strong> (${daysLeft} days left)</h3>
+        <div class="routine-block">🕘 8:00 AM – Wake Up & Morning Routine</div>
+        <div class="routine-block">🍳 9:00 AM – Breakfast</div>
+        <div class="routine-block">📖 10:00 AM – Study Session (2 hrs)</div>
+        <div class="routine-block">☕ 12:00 PM – Short Break</div>
+        <div class="routine-block">📖 12:30 PM – Study Session (1.5 hrs)</div>
+        <div class="routine-block">🍱 2:00 PM – Lunch</div>
+        <div class="routine-block">💤 3:00 PM – Rest/Nap</div>
+        <div class="routine-block">🏃‍♀️ 4:00 PM – Exercise / Walk</div>
+        <div class="routine-block">📖 5:00 PM – Study Session (1.5 hrs)</div>
+        <div class="routine-block">☕ 6:30 PM – Tea & Break</div>
+        <div class="routine-block">📖 7:00 PM – Review / Flashcards (1 hr)</div>
+        <div class="routine-block">🍽️ 8:00 PM – Dinner</div>
+        <div class="routine-block">🧘 9:00 PM – Light Activity / Relax</div>
+        <div class="routine-block">🛌 10:00 PM – Sleep</div>
+        <p style="margin-top:20px;">📌 Estimated Study Hours/Day: <strong>${dailyStudyHours}</strong></p>`;
+    });
+
+    // To-Do List
+    document.getElementById("todo-form").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const task = document.getElementById("task").value;
+      const category = document.getElementById("category").value;
+      const deadline = document.getElementById("deadline").value;
+      const description = document.getElementById("description").value;
+      const li = document.createElement("li");
+      li.innerHTML = `<input type="checkbox" /> <strong>${task}</strong> (${category}) - ${deadline}<br><em>${description}</em>`;
+      li.querySelector("input").addEventListener("change", function() {
+        li.classList.toggle("task-done");
+        if (this.checked) alert("Yay! One step closer! 🎉");
+      });
+      document.getElementById("todo-list").appendChild(li);
+      this.reset();
+    });
+
+    // Pomodoro Timer
+    let timer, timeLeft = 1500;
+    function startTimer() {
+      clearInterval(timer);
+      timer = setInterval(() => {
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          alert("Time's up! Take a break 💆‍♀️");
+          return;
+        }
+        timeLeft--;
+        const min = Math.floor(timeLeft / 60).toString().padStart(2, "0");
+        const sec = (timeLeft % 60).toString().padStart(2, "0");
+        document.getElementById("time").innerText = `${min}:${sec}`;
+      }, 1000);
+    }
+    function resetTimer() {
+      clearInterval(timer);
+      timeLeft = 1500;
+      document.getElementById("time").innerText = "25:00";
+    }
+
+    // Roadmap Generator
+    document.getElementById("roadmap-form").addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  const grade = parseInt(document.getElementById("grade").value);
+  const hobbies = document.getElementById("hobbies").value.toLowerCase().split(',').map(h => h.trim());
+  const goal = document.getElementById("goal").value.toLowerCase();
+  const output = document.getElementById("roadmap-output");
+  output.innerHTML = "";
+
+  let content = "";
+
+  const majorSuggestions = {
+    "doctor": ["MBBS", "B.Sc. in Biology", "BPT", "BAMS"],
+    "engineer": ["B.Tech", "B.E", "BCA"],
+    "artist": ["BFA", "Bachelor of Design", "Multimedia & Animation"],
+    "lawyer": ["BA LLB", "BBA LLB"],
+    "psychologist": ["BA Psychology", "B.Sc. Psychology"],
+    "teacher": ["B.Ed", "BA/B.Sc + B.Ed"],
+    "scientist": ["B.Sc (Physics/Chemistry/Biology)", "Research programs"],
+    "writer": ["BA in Literature", "Creative Writing"],
+    "business": ["BBA", "B.Com", "Economics"]
+  };
+
+  const hobbyMap = {
+    "drawing": ["Design", "Fine Arts", "Architecture"],
+    "gaming": ["Game Design", "Computer Science"],
+    "reading": ["Literature", "Law", "History"],
+    "writing": ["Creative Writing", "Journalism", "Psychology"],
+    "sports": ["Sports Science", "Physiotherapy", "Management"],
+    "tech": ["Computer Science", "AI", "Data Science"],
+    "fashion": ["Fashion Design", "Textile Technology"],
+    "music": ["Music Production", "Performing Arts"]
+  };
+
+  const collegeSuggestions = {
+    "b.tech": ["IITs", "NITs", "BITS Pilani"],
+    "mbbs": ["AIIMS", "CMC Vellore", "JIPMER"],
+    "bfa": ["NID", "JJ School of Arts", "NIFT"],
+    "law": ["NLU Delhi", "NALSAR", "Symbiosis"],
+    "psychology": ["Delhi University", "Christ University", "Ashoka University"],
+    "bba": ["IIM Indore (IPM)", "NMIMS", "Christ University"],
+    "cs": ["IIIT Hyderabad", "MIT", "Stanford (if abroad)"],
+    "fashion": ["NIFT", "Pearl Academy"],
+    "science": ["IISc", "IISERs", "DU"]
+  };
+
+  if (goal) {
+    const majors = majorSuggestions[goal] || ["No specific matches, but try related fields like B.A or B.Sc."];
+    content += `<h3>🎯 Based on your goal to become a <b>${goal}</b>:</h3>`;
+    content += `<p><b>Suggested Degrees:</b> ${majors.join(", ")}</p>`;
+
+    const colleges = majors
+      .map(m => m.toLowerCase())
+      .flatMap(m => collegeSuggestions[m] || [])
+      .filter((v, i, a) => a.indexOf(v) === i);
+
+    content += `<p><b>Top Colleges:</b> ${colleges.length ? colleges.join(", ") : "Try searching for top colleges offering the above degrees."}</p>`;
+
+    content += `<p><b>Backup Options:</b> Explore related fields such as Liberal Arts, Psychology, or Commerce if you want flexibility.</p>`;
+  } else {
+    let fieldSet = new Set();
+    hobbies.forEach(hobby => {
+      if (hobbyMap[hobby]) {
+        hobbyMap[hobby].forEach(f => fieldSet.add(f));
+      }
+    });
+
+    if (fieldSet.size > 0) {
+      content += `<h3>🌟 Based on your hobbies:</h3>`;
+      content += `<p><b>Suggested Fields:</b> ${[...fieldSet].join(", ")}</p>`;
+      content += `<p><b>Next Step:</b> Try researching career paths in these areas and identify your favorites.</p>`;
+    } else {
+      content += `<p>🎲 No strong matches found, but stay curious! Explore different career paths through short online courses.</p>`;
+    }
+  }
+
+  output.innerHTML = content;
+});
+
+    // Habit Tracker
+    document.getElementById("habit-form").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const habit = document.getElementById("habit-name").value;
+      const li = document.createElement("li");
+      li.innerHTML = `<label><input type="checkbox"> ${habit}</label>`;
+      document.getElementById("habit-list").appendChild(li);
+      this.reset();
+    });
+  </script>
+</body>
+</html>
